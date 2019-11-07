@@ -1,5 +1,4 @@
 #!/bin/bash
-
 counter=0
 
 for file in `ls *.ddl`;
@@ -25,12 +24,11 @@ do
         first=`echo $line | cut -d"'" -f 1`
         second=`echo $line | cut -d"'" -f 2`
 
-
         col_name=`echo $first | cut -d" " -f 1`
         #printf "READING COLUMN_NAME: $col_name\n"
 
         new_col_name=col${counter}
-        printf "replace $new_col_name in $table_name.ddl.hive with $col_name\n"
+        #printf "replace $new_col_name in $table_name.ddl.hive with $col_name\n"
         sed -i "s/\<${new_col_name}\>/${col_name}/g" $table_name.ddl.hive
 
         #Now we try to get the comment
@@ -55,6 +53,9 @@ do
 printf "$col_name '$second'\n" >> /tmp/col_info.tmp
 
 done < $file
-#mv $file.hive ./hive-ddl/
-#mv $file ./original-ddl/
+mv $file.hive ./hive-ddl/
+mv $file ./original-ddl/
 printf "completed $file\n"
+
+cat ./hive-ddl/$table_name.ddl.hive
+done;
